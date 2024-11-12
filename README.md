@@ -50,11 +50,11 @@ The data comprises of 3 paired-end short read sequencing E coli samples.
 
 Let's start by loading the BioSAILs software environment,
 
-'''
+```
 module purge
 module load gencore
 module load gencore_biosails
-'''
+```
 
 You can now run 'biox --help' to bring up the Biox command help menu.
 
@@ -62,9 +62,9 @@ Our workflow is called **qc-qt.yml**, and to run the first part of our analysis,
 
 To do this,
 
-'''
+```
 biox run -w qc-qt.yml -o my-qc.sh
-'''
+```
 
 So let's breakdown the biox command a little bit,
 
@@ -74,13 +74,13 @@ So let's breakdown the biox command a little bit,
 
 But what if we don't want to run on all the samples, and what if we only wanted to run the sample "sub_sample1" for example. In this case, we can overwrite the automatic sample searching by providing the "--samples" flag to biox followed by the name of the sample we are interested in, for example,
 
-'''
+```
 biox run -w qc-qt.yml --samples sub_sample1 -o my-qc-sub_sample1.sh
-'''
+```
 
 We can also provide multiple selected samples that are comma-separated, for example,
 
-'''
+```
 biox run -w qc-qt.yml --samples sub_sample1,sub_sample2 -o my-qc-sub_samples_1_and_2.sh
-'''
+```
 
