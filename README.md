@@ -173,7 +173,7 @@ For this final exercise, you are starting from scratch (well almost). We have pr
 
 - Take as input the reads that are found in the folder called "exercise3_reads".
 - Align the reads to the human genome using BWA MEM (full path to the genome is below).
-  `/scratch/Reference_Genomes/Public/Vertebrate_mammalian/Homo_sapiens/GATK_reference_bundle_hg38/Homo_sapiens_assembly38`.
+  `/scratch/Reference_Genomes/Public/Vertebrate_mammalian/Homo_sapiens/GATK_reference_bundle_hg38/Homo_sapiens_assembly38.fasta`.
 - Convert the BWA MEM SAM alignments to BAM using SAMtools.
 - Coordinate sort the BAM alignments using SAMtools.
 - Index the coordinate sorted BAM using SAMtools.
