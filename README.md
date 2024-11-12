@@ -149,3 +149,71 @@ In this folder, you will find 1 folder per rule, with individual logs that have 
 The other benefit to this detailed level of logging is reproducible research, because BioSAILs logs absolutely everything including compute nodes, computational requirements, parameters, runtimes, exitcodes, inputs/outputs etc.
 
 Let's spend a few minutes familiarizing ourselves with all of the above before moving to the next excercise.
+
+## Exercise 2: Modifying an RNAseq workflow and running it
+
+For this exercise, we will be using an existing workflow called "rnaseq.yml" to run the quality trimmed reads through 4 step analysis workflow.
+
+There are a few things that we need to do in order to make this workflow work and these are:
+
+- Modify the YAML so that it can search in the output directory of the previous step where the quality trimmed reads exist (data/processed).
+- Instruct the YAML that the input is to be found in dedicated "sample" directories.
+- Create a couple of user defined global variables to capture the quality trimmed read1s and read2s for each sample.
+- Add the missing dependencies in the "local" rules such that no jobs start running before they are supposed to. For example, the second rule "samtools_view" should not run before the "hisat2" job completes (Hint: use the "deps:" special parameter).
+
+Once that is done, you can go ahead and submit the workflow similar to the previous step (using the biox command and the hpcrunner.pl command).
+
+After the analysis jobs complete, please look through the logs of the alignment step (hisat2), and find out what the overall alignment rates were for each sample.
+
+Solution to this exercise is found towards the end (look for the heading **SOLUTION Exercise 2**.
+
+## Exercise 3: Create your own workflow
+
+For this final exercise, you are starting from scratch (well almost). We have provided you with a basic BioSAILs YAML workflow template called "template_wf.yml" and it is up to you to create a workflow that does the following,
+
+- Take as input the reads that are found in the folder called "exercise3_reads".
+- Align the reads to the E coli genome that you used in Exercise 2 using BWA MEM.
+- Convert the BWA MEM SAM alignments to BAM using SAMtools.
+- Coordinate sort the BAM alignments using SAMtools.
+- Extract all the unaligned read pairs from the coordinate sorted BAM (using SAMtools), and output them to another file that is named "SAMPLE_name_unmapped.bam".
+- Index the coordinate sorted BAM using SAMtools.
+- Use BCFtools mpileup to generate a GVCF from the coordinate sorted BAM file [details on usage can be found here [https://samtools.github.io/bcftools/bcftools.html#mpileup]).
+
+**Hints:**
+- Make sure that the appropriate "module purge, module load" commands are used in each rule.
+- Make sure that the structure of the input FASTQ files and how sample names are defined matches the current setup in the "exercise3_reads" folder.
+- Make sure that your dependencies are set correctly.
+- Make sure that the inputs and outputs from one rule to the next are correct.
+- Make sure that the MEMORY and CPUs are set according to the resources that are required by each rule.
+- Remember, YOU CAN ALWAYS COPY THE WORKFLOW INTO THE LOCATION OF YOUR INPUT(s) TO AVOID DEFINING A PATH TO THE "indir" VARIABLE.
+
+Resources usage:
+- BWA MEM use 50GB and 12 CPUs.
+- SAMtools use 50GB and 24 CPUs.
+- BCFtools use 50GB and 24 CPUs.
+
+Once you have written your workflow, go ahead and run it through biox and hpcrunner.pl.
+
+Solution to this exercise can be found at the end under the heading **SOLUTION Exercise 3**.
+
+## Conclusion
+
+If you made it this far, congradulations! You can now start writting your own analysis workflows. I know we introduced many concepts during this tutorial, but being able to read papers and translate the methods into a production workflow can be fun and very rewarding.
+Once you have understood the basics of the structure, there are countless scenarios that you can apply this to. I have even used BioSAILs to organize my photo archive into Months/Seasons/Years.
+And remember, once you have a good template with a few rules, you can repurpose it again and again to suit new rules and methods.
+
+If you need any help or guidence in creating your own workflows, then don't hestitate to get in touch with us, we are more than happy to help!
+
+Thank you.
+
+The NYUAD Core Bioinformatics.
+
+
+## SOLUTION: Exercise 2
+
+
+
+## SOLUTION: Exercise 3
+
+
+
