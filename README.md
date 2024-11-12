@@ -45,3 +45,4 @@ We will be using the NYUAD High Performance Computing (HPC) cluster for this wor
 
 ## Execise 1: Submitting a simple QC/QT workflow
 
+For our first excercise, we will be submitting a workflow that has 3 rules, or analysis steps
