@@ -49,6 +49,7 @@ For our first excercise, we will be submitting a workflow that has 3 rules, or a
 The data comprises of 3 paired-end short read sequencing E coli samples.
 
 Let's start by loading the BioSAILs software environment,
+
 '''
 module purge
 module load gencore
