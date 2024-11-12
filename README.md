@@ -179,7 +179,8 @@ For this final exercise, you are starting from scratch (well almost). We have pr
 - Index the coordinate sorted BAM using SAMtools.
 - Extract all the unaligned read pairs from the coordinate sorted BAM (using SAMtools), and output them to another file that is named "SAMPLE_name_unmapped.bam".
 - Add read groups to your coordinate sorted BAM using the PICARD command AddOrReplaceReadGroups [https://gatk.broadinstitute.org/hc/en-us/articles/360037226472-AddOrReplaceReadGroups-Picard]. An example command is below,
-  ```
+
+```
 picard -Xmx20g AddOrReplaceReadGroups \
 SORT_ORDER=coordinate \
 RGID=1 \
@@ -189,7 +190,8 @@ RGPU=unit1 \
 RGSM=a \
 I=input.sorted.bam \
 O=output.rg.sorted.bam
-  ```
+```
+
 - Use GATK HaplotypeCaller to generate a GVCF from the coordinate sorted BAM that contains the read groups [details on usage can be found here [https://gatk.broadinstitute.org/hc/en-us/articles/360037225632-HaplotypeCaller]).
 
 **Hints:**
