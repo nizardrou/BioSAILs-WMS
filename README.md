@@ -56,6 +56,7 @@ module load gencore
 module load gencore_biosails
 ```
 
+### The BIOX command
 You can now run 'biox --help' to bring up the Biox command help menu.
 
 Our workflow is called **qc-qt.yml**, and to run the first part of our analysis, we need to use the **biox**, which will read this YAML workflow (qc-qt.yml), look at the directory containg the input (the current directory containing the 3 e coli samples), and produce an executable shell script. 
@@ -84,3 +85,67 @@ We can also provide multiple selected samples that are comma-separated, for exam
 biox run -w qc-qt.yml --samples sub_sample1,sub_sample2 -o my-qc-sub_samples_1_and_2.sh
 ```
 
+Biox will not only create the executable shell script, but it will also create the output directory structure for us (according to the instructions that were provided in the YAML workflow). In this case, the workflow defined the output (outdir) variable as "data/processed/", and so biox will create this directory, and proceed to create 3 sub-directories, one for each of our samples. You can see that for yourselves,
+
+```
+ls -1 data/processed
+```
+
+Biox will also create an output directory per rule (analysis step) according to what that rule is called in our workflow by default, and in our case, the 3 rules are called raw_fastqc, fastp, qt_fastqc.
+
+```
+ls -1 data/processed/*/*
+```
+
+This behaviour cand be overwritten ib biox by defining a local variable "create_outdir: 0" within the rule that we don't want to have an output directory created.
+
+For example, if we did not want the raw_fastqc rule to have an output directory create within the samples directories by default, we will change it from this,
+
+```
+    - raw_fastqc:
+        local:
+            - indir: "{$self->root_in_dir}"
+            - outdir: "{$self->raw_fastqc_dir}"
+            - OUTPUT: "{$self->outdir}/{$sample}"
+            - HPC:
+               - walltime: '08:00:00'
+               - cpus_per_task: 12
+               - mem: '55GB'
+```
+To this (look at the 3rd line after the "local:"),
+
+```
+    - raw_fastqc:
+        local:
+            - create_outdir: 0
+            - indir: "{$self->root_in_dir}"
+            - outdir: "{$self->raw_fastqc_dir}"
+            - OUTPUT: "{$self->outdir}/{$sample}"
+            - HPC:
+               - walltime: '08:00:00'
+               - cpus_per_task: 12
+               - mem: '55GB'
+```
+
+### The HPCrunner command
+
+Greate, so now we are ready to submit the executable shell script in the SLURM queue, and it couldn't be simpler than,
+```
+hpcrunner.pl submit_jobs -i my-qc.sh --project my-qc
+```
+And in fact, you don't even need the "--project my-qc" flag, we only add it because it will use the name that we provide to "--project" (my-qc in this case) as the name of the submission in SLURM, and the name of the logs output directory. This makes it easier in case you are submitting multiple analyses to figure out, which ones are running, completed pending etc. It also means that it is then easier to navigate the logs folders in case you submitted multiple analyses within the same folder. So in essence, it's just good practice!
+
+If you don't have a scheduler (for example if you are submitting this on your own machine), then you can bypass the hpcrunner.pl stage and just run the executable on the command line. Jus t make sure to change the permissions first `chmod 777 my-qc.sh` and then simply run it `./my-qc.sh`.
+
+Since we submitted to the scheduler, you can check the status of your jobs using 'squeue'. Once the jobs have finished, your analysis is complete.
+
+Everything should be in the output "data/processed/ folder, so "cd" into each directory and see if all the expected results are there.
+
+You can also examine the logs by navigating to the "hpc-runner" folder,
+```
+cd hpc-runner/*/my-qc/logs
+```
+In this folder, you will find 1 folder per rule, with individual logs that have the ".md" suffix. Each one of these contains detailed information about the analysis job for each rule and for each sample. So if something went wrong, this is where you should start looking!
+The other benefit to this detailed level of logging is reproducible research, because BioSAILs logs absolutely everything including compute nodes, computational requirements, parameters, runtimes, exitcodes, inputs/outputs etc.
+
+Let's spend a few minutes familiarizing ourselves with all of the above before moving to the next excercise.
