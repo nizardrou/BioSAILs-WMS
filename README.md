@@ -45,4 +45,41 @@ We will be using the NYUAD High Performance Computing (HPC) cluster for this wor
 
 ## Execise 1: Submitting a simple QC/QT workflow
 
-For our first excercise, we will be submitting a workflow that has 3 rules, or analysis steps
+For our first excercise, we will be submitting a workflow that has 3 rules, or analysis steps, raw quality checking using FASTQC, quality trimming using FASTP, and rechecking of the quality trimmed reads using FASTQC again.
+The data comprises of 3 paired-end short read sequencing E coli samples.
+
+Let's start by loading the BioSAILs software environment,
+'''
+module purge
+module load gencore
+module load gencore_biosails
+'''
+
+You can now run 'biox --help' to bring up the Biox command help menu.
+
+Our workflow is called **qc-qt.yml**, and to run the first part of our analysis, we need to use the **biox**, which will read this YAML workflow (qc-qt.yml), look at the directory containg the input (the current directory containing the 3 e coli samples), and produce an executable shell script. 
+
+To do this,
+
+'''
+biox run -w qc-qt.yml -o my-qc.sh
+'''
+
+So let's breakdown the biox command a little bit,
+
+- First we used the "run" sub-command, which tells biox that we want to, well, "run" a workflow and create an output.
+- The "-w" flag tells biox, which workflow we are executing, and it always expects an input, in this case the qc-qt.yml workflow.
+- The "-o" also expects a parameter, which is the name of our output shell script file, in this case we called it "my-qc.sh" but you can give it any name (although you should use the .sh suffix).
+
+But what if we don't want to run on all the samples, and what if we only wanted to run the sample "sub_sample1" for example. In this case, we can overwrite the automatic sample searching by providing the "--samples" flag to biox followed by the name of the sample we are interested in, for example,
+
+'''
+biox run -w qc-qt.yml --samples sub_sample1 -o my-qc-sub_sample1.sh
+'''
+
+We can also provide multiple selected samples that are comma-separated, for example,
+
+'''
+biox run -w qc-qt.yml --samples sub_sample1,sub_sample2 -o my-qc-sub_samples_1_and_2.sh
+'''
+
