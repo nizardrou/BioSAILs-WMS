@@ -46,7 +46,7 @@ We will be using the NYUAD High Performance Computing (HPC) cluster for this wor
 ## Execise 1: Submitting a simple QC/QT workflow
 
 For our first excercise, we will be submitting a workflow that has 3 rules, or analysis steps, raw quality checking using FASTQC, quality trimming using FASTP, and rechecking of the quality trimmed reads using FASTQC again.
-The data comprises of 3 paired-end short read sequencing E coli samples.
+The data comprises of 3 paired-end short read sequencing human samples (sub-sampled for speed).
 
 Let's start by loading the BioSAILs software environment,
 
@@ -172,12 +172,13 @@ Solution to this exercise is found towards the end (look for the heading **SOLUT
 For this final exercise, you are starting from scratch (well almost). We have provided you with a basic BioSAILs YAML workflow template called "template_wf.yml" and it is up to you to create a workflow that does the following,
 
 - Take as input the reads that are found in the folder called "exercise3_reads".
-- Align the reads to the E coli genome that you used in Exercise 2 using BWA MEM.
+- Align the reads to the human genome using BWA MEM (full path to the genome is below).
+  `/scratch/Reference_Genomes/Public/Vertebrate_mammalian/Homo_sapiens/GATK_reference_bundle_hg38/Homo_sapiens_assembly38`.
 - Convert the BWA MEM SAM alignments to BAM using SAMtools.
 - Coordinate sort the BAM alignments using SAMtools.
-- Extract all the unaligned read pairs from the coordinate sorted BAM (using SAMtools), and output them to another file that is named "SAMPLE_name_unmapped.bam".
 - Index the coordinate sorted BAM using SAMtools.
-- Use BCFtools mpileup to generate a GVCF from the coordinate sorted BAM file [details on usage can be found here [https://samtools.github.io/bcftools/bcftools.html#mpileup]).
+- Extract all the unaligned read pairs from the coordinate sorted BAM (using SAMtools), and output them to another file that is named "SAMPLE_name_unmapped.bam".
+- Use GATK HaplotypeCaller to generate a GVCF from the coordinate sorted BAM file [details on usage can be found here [https://gatk.broadinstitute.org/hc/en-us/articles/360037225632-HaplotypeCaller]).
 
 **Hints:**
 - Make sure that the appropriate "module purge, module load" commands are used in each rule.
