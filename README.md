@@ -97,7 +97,7 @@ Biox will also create an output directory per rule (analysis step) according to 
 ls -1 data/processed/*/*
 ```
 
-This behaviour cand be overwritten ib biox by defining a local variable "create_outdir: 0" within the rule that we don't want to have an output directory created.
+This behaviour can be overwritten in biox by defining a local variable "create_outdir: 0" within the rule that we don't want to have an output directory created.
 
 For example, if we did not want the raw_fastqc rule to have an output directory create within the samples directories by default, we will change it from this,
 
